@@ -1,4 +1,4 @@
-package boltstore;
+package protobuf;
 
 message Session {
 	optional bytes Values = 1;

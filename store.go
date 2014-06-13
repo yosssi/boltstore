@@ -12,6 +12,7 @@ import (
 	"github.com/boltdb/bolt"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+	"github.com/yosssi/boltstore/protobuf"
 )
 
 // store represents a session store.
@@ -108,7 +109,7 @@ func (s *store) load(session *sessions.Session) (bool, error) {
 		if data == nil {
 			return nil
 		}
-		sessionData := &Session{}
+		sessionData := &protobuf.Session{}
 		// Convert the byte slice to the Session struct value.
 		if err := proto.Unmarshal(data, sessionData); err != nil {
 			return err

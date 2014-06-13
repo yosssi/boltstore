@@ -3,7 +3,7 @@
 // DO NOT EDIT!
 
 /*
-Package boltstore is a generated protocol buffer package.
+Package protobuf is a generated protocol buffer package.
 
 It is generated from these files:
 	session.proto
@@ -11,7 +11,7 @@ It is generated from these files:
 It has these top-level messages:
 	Session
 */
-package boltstore
+package protobuf
 
 import proto "code.google.com/p/gogoprotobuf/proto"
 import json "encoding/json"
