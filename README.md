@@ -1,6 +1,10 @@
-# BoltStore - Session store backend for gorilla/sessions using Bolt
+# BoltStore
 
 [![GoDoc](https://godoc.org/github.com/yosssi/boltstore?status.png)](https://godoc.org/github.com/yosssi/boltstore)
+
+## About
+
+BoltStore is a session store backend for [gorilla/sessions](https://github.com/gorilla/sessions) using [Bolt](https://github.com/boltdb/bolt).
 
 ## Installation
 
