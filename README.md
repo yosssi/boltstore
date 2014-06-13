@@ -9,7 +9,7 @@ BoltStore is a session store backend for [gorilla/sessions](https://github.com/g
 ## Installation
 
 ```go
-go get github.com/yosssi/boltstore
+go get github.com/yosssi/boltstore/...
 ```
 
 ## Example
