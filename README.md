@@ -43,7 +43,7 @@ if err := sessions.Save(r, w); err != nil {
 	panic(err)
 }
 
-// Delete session.
+// Delete the session.
 session.Options.MaxAge = -1
 if err := sessions.Save(r, w); err != nil {
 	panic(err)
