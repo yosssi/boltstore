@@ -14,8 +14,8 @@ import (
 	"github.com/yosssi/boltstore/shared"
 )
 
-// store represents a session store.
-type store struct {
+// Store represents a session store.
+type Store struct {
 	codecs []securecookie.Codec
 	config Config
 	db     *bolt.DB
@@ -24,14 +24,14 @@ type store struct {
 // Get returns a session for the given name after adding it to the registry.
 //
 // See gorilla/sessions FilesystemStore.Get().
-func (s *store) Get(r *http.Request, name string) (*sessions.Session, error) {
+func (s *Store) Get(r *http.Request, name string) (*sessions.Session, error) {
 	return sessions.GetRegistry(r).Get(s, name)
 }
 
 // New returns a session for the given name without adding it to the registry.
 //
 // See gorilla/sessions FilesystemStore.New().
-func (s *store) New(r *http.Request, name string) (*sessions.Session, error) {
+func (s *Store) New(r *http.Request, name string) (*sessions.Session, error) {
 	var err error
 	session := sessions.NewSession(s, name)
 	session.Options = &s.config.SessionOptions
@@ -47,7 +47,7 @@ func (s *store) New(r *http.Request, name string) (*sessions.Session, error) {
 }
 
 // Save adds a single session to the response.
-func (s *store) Save(r *http.Request, w http.ResponseWriter, session *sessions.Session) error {
+func (s *Store) Save(r *http.Request, w http.ResponseWriter, session *sessions.Session) error {
 	if session.Options.MaxAge < 0 {
 		s.delete(session)
 		http.SetCookie(w, sessions.NewCookie(session.Name(), "", session.Options))
@@ -70,7 +70,7 @@ func (s *store) Save(r *http.Request, w http.ResponseWriter, session *sessions.S
 
 // load loads a session data from the database.
 // True is returned if there is a session data in the database.
-func (s *store) load(session *sessions.Session) (bool, error) {
+func (s *Store) load(session *sessions.Session) (bool, error) {
 	// exists represents whether a session data exists or not.
 	var exists bool
 	err := s.db.View(func(tx *bolt.Tx) error {
@@ -100,7 +100,7 @@ func (s *store) load(session *sessions.Session) (bool, error) {
 }
 
 // delete removes the key-value from the database.
-func (s *store) delete(session *sessions.Session) error {
+func (s *Store) delete(session *sessions.Session) error {
 	err := s.db.Update(func(tx *bolt.Tx) error {
 		return tx.Bucket(s.config.DBOptions.BucketName).Delete([]byte(session.ID))
 	})
@@ -111,7 +111,7 @@ func (s *store) delete(session *sessions.Session) error {
 }
 
 // save stores the session data in the database.
-func (s *store) save(session *sessions.Session) error {
+func (s *Store) save(session *sessions.Session) error {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
 	err := enc.Encode(session.Values)
@@ -129,9 +129,9 @@ func (s *store) save(session *sessions.Session) error {
 }
 
 // New creates and returns a session store.
-func New(db *bolt.DB, config Config, keyPairs ...[]byte) (*store, error) {
+func New(db *bolt.DB, config Config, keyPairs ...[]byte) (*Store, error) {
 	config.setDefault()
-	store := &store{
+	store := &Store{
 		codecs: securecookie.CodecsFromPairs(keyPairs...),
 		config: config,
 		db:     db,
