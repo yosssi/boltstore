@@ -30,7 +30,7 @@ if err != nil {
 defer store.Close()
 
 // Get a session.
-sessions, err := store.Get(r, "session-key")
+session, err := store.Get(r, "session-key")
 if err != nil {
 	panic(err)
 }
@@ -43,7 +43,7 @@ if err := sessions.Save(r, w); err != nil {
 	panic(err)
 }
 
-// Delete session.
+// Delete the session.
 session.Options.MaxAge = -1
 if err := sessions.Save(r, w); err != nil {
 	panic(err)
