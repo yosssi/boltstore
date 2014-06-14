@@ -1,9 +1,9 @@
-package boltstore
+package store
 
 import (
 	"time"
 
-	"github.com/yosssi/boltstore/protobuf"
+	"github.com/yosssi/boltstore/shared/protobuf"
 )
 
 // NewSession creates and returns a session data.

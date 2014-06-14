@@ -1,4 +1,4 @@
-package boltstore
+package store
 
 import (
 	"bytes"
@@ -6,13 +6,12 @@ import (
 	"encoding/gob"
 	"net/http"
 	"strings"
-	"time"
 	"code.google.com/p/gogoprotobuf/proto"
 
 	"github.com/boltdb/bolt"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-	"github.com/yosssi/boltstore/protobuf"
+	"github.com/yosssi/boltstore/shared"
 )
 
 // store represents a session store.
@@ -69,39 +68,12 @@ func (s *store) Save(r *http.Request, w http.ResponseWriter, session *sessions.S
 	return nil
 }
 
-// Close closes the database.
-func (s *store) Close() error {
-	return s.db.Close()
-}
-
-// open Opens a database and sets it to the session store.
-func (s *store) open() error {
-	// Open a database.
-	db, err := bolt.Open(s.config.DBOptions.Path, 0666)
-	if err != nil {
-		return err
-	}
-	// Create a bucket if it does not exist.
-	err = db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists(s.config.DBOptions.BucketName)
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	if err != nil {
-		return err
-	}
-	s.db = db
-	return nil
-}
-
 // load loads a session data from the database.
 // True is returned if there is a session data in the database.
 func (s *store) load(session *sessions.Session) (bool, error) {
 	// exists represents whether a session data exists or not.
 	var exists bool
-	err := s.db.Update(func(tx *bolt.Tx) error {
+	err := s.db.View(func(tx *bolt.Tx) error {
 		id := []byte(session.ID)
 		bucket := tx.Bucket(s.config.DBOptions.BucketName)
 		// Get the session data.
@@ -109,17 +81,16 @@ func (s *store) load(session *sessions.Session) (bool, error) {
 		if data == nil {
 			return nil
 		}
-		sessionData := &protobuf.Session{}
-		// Convert the byte slice to the Session struct value.
-		if err := proto.Unmarshal(data, sessionData); err != nil {
+		sessionData, err := shared.Session(data)
+		if err != nil {
 			return err
 		}
 		// Check the expiration of the session data.
-		if *sessionData.ExpiresAt > 0 && *sessionData.ExpiresAt < time.Now().Unix() {
-			if err := bucket.Delete(id); err != nil {
-				return err
-			}
-			return nil
+		if shared.Expired(sessionData) {
+			err := s.db.Update(func(txu *bolt.Tx) error {
+				return txu.Bucket(s.config.DBOptions.BucketName).Delete(id)
+			})
+			return err
 		}
 		exists = true
 		dec := gob.NewDecoder(bytes.NewBuffer(sessionData.Values))
@@ -158,13 +129,18 @@ func (s *store) save(session *sessions.Session) error {
 }
 
 // New creates and returns a session store.
-func New(config Config, keyPairs ...[]byte) (*store, error) {
+func New(db *bolt.DB, config Config, keyPairs ...[]byte) (*store, error) {
 	config.setDefault()
 	store := &store{
 		codecs: securecookie.CodecsFromPairs(keyPairs...),
 		config: config,
+		db:     db,
 	}
-	if err := store.open(); err != nil {
+	err := db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists(config.DBOptions.BucketName)
+		return err
+	})
+	if err != nil {
 		return nil, err
 	}
 	return store, nil
