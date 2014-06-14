@@ -16,7 +16,7 @@ func Run(db *bolt.DB, options Options) (chan<- struct{}, <-chan struct{}) {
 	return quitC, doneC
 }
 
-// Quit terminats the reap goroutine.
+// Quit terminates the reap goroutine.
 func Quit(quitC chan<- struct{}, doneC <-chan struct{}) {
 	quitC <- struct{}{}
 	<-doneC
