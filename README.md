@@ -54,7 +54,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Add a value.
 	session.Values["foo"] = "bar"
 
-	// Save.
+	// Save the session.
 	if err := sessions.Save(r, w); err != nil {
 		panic(err)
 	}
@@ -69,6 +69,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Open a Bolt database.
 	db, _ = bolt.Open("./sessions.db", 0666)
 	defer db.Close()
 	// Invoke a reaper which removes expired sessions.
