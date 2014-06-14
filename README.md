@@ -69,11 +69,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// Open a Bolt database.
-	db, err := bolt.Open("./sessions.db", 0666)
-	if err != nil {
-		panic(err)
-	}
+	db, _ = bolt.Open("./sessions.db", 0666)
 	defer db.Close()
 	// Invoke a reaper which removes expired sessions.
 	defer reaper.Quit(reaper.Run(db, reaper.Options{}))
