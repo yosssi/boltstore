@@ -16,6 +16,9 @@ func (c *Config) setDefault() {
 	if c.SessionOptions.Path == "" {
 		c.SessionOptions.Path = shared.DefaultPath
 	}
+	if c.SessionOptions.MaxAge == 0 {
+		c.SessionOptions.MaxAge = shared.DefaultMaxAge
+	}
 	if c.DBOptions.BucketName == nil {
 		c.DBOptions.BucketName = []byte(shared.DefaultBucketName)
 	}

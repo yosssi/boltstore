@@ -18,3 +18,9 @@ func Session(data []byte) (protobuf.Session, error) {
 func Expired(session protobuf.Session) bool {
 	return *session.ExpiresAt > 0 && *session.ExpiresAt <= time.Now().Unix()
 }
+
+// NewSession creates and returns a session data.
+func NewSession(values []byte, maxAge int) *protobuf.Session {
+	expiresAt := time.Now().Unix() + int64(maxAge)
+	return &protobuf.Session{Values: values, ExpiresAt: &expiresAt}
+}

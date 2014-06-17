@@ -2,9 +2,14 @@ package shared
 
 import "time"
 
+// Defaults for sessions.Options
+const (
+	DefaultPath   = "/"
+	DefaultMaxAge = 60 * 60 * 24 * 30 // 30days
+)
+
 // Defaults for store.Options
 const (
-	DefaultPath       = "/"
 	DefaultBucketName = "sessions"
 )
 

@@ -118,7 +118,7 @@ func (s *Store) save(session *sessions.Session) error {
 	if err != nil {
 		return err
 	}
-	data, err := proto.Marshal(NewSession(buf.Bytes(), session.Options.MaxAge))
+	data, err := proto.Marshal(shared.NewSession(buf.Bytes(), session.Options.MaxAge))
 	if err != nil {
 		return nil
 	}

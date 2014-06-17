@@ -48,3 +48,14 @@ func TestExpired(t *testing.T) {
 		t.Error("Expired() should return false (actual: true)")
 	}
 }
+
+func TestNewSession(t *testing.T) {
+	values := []byte("test")
+	maxAge := 10
+	preExpiresAt := time.Now().Unix() + int64(maxAge)
+	session := NewSession(values, maxAge)
+	postExpiresAt := time.Now().Unix() + int64(maxAge)
+	if string(session.Values) != string(values) || *session.ExpiresAt < preExpiresAt || postExpiresAt < *session.ExpiresAt {
+		t.Errorf("NewSession() returned an invalid value (actual: %+v)", session)
+	}
+}
