@@ -1,4 +1,4 @@
-box: yosssi/golang-latest@1.0.2
+box: yosssi/golang-latest@1.0.3
 # Build definition
 build:
   # The steps that will be executed on build
@@ -26,3 +26,10 @@ build:
         name: go test
         code: |
           go test --cover ./...
+
+    # Invoke goveralls
+    - script:
+        name: goveralls
+        code: |
+          go get github.com/mattn/goveralls
+          goveralls -repotoken $COVERALLS_REPO_TOKEN
