@@ -1,11 +1,10 @@
-# BoltStore
+# BoltStore - Session store using Bolt
 
-[![wercker status](https://app.wercker.com/status/752959ce0f923476671e49fb9b76ebe0/s "wercker status")](https://app.wercker.com/project/bykey/752959ce0f923476671e49fb9b76ebe0)
-[![GoDoc](https://godoc.org/github.com/yosssi/boltstore?status.png)](https://godoc.org/github.com/yosssi/boltstore)
+[![wercker status](https://app.wercker.com/status/752959ce0f923476671e49fb9b76ebe0/m "wercker status")](https://app.wercker.com/project/bykey/752959ce0f923476671e49fb9b76ebe0)
 
 ## About
 
-BoltStore is a session store backend for [gorilla/sessions](https://github.com/gorilla/sessions) using [Bolt](https://github.com/boltdb/bolt).
+BoltStore is a session store using [Bolt](https://github.com/boltdb/bolt). This store implements the [gorilla/sessions](https://github.com/gorilla/sessions) package's [Store](http://godoc.org/github.com/gorilla/sessions#Store) interface.
 
 ## Installation
 
