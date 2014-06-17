@@ -1,4 +1,4 @@
-box: yosssi/golang-latest@1.0.1
+box: yosssi/golang-latest@1.0.2
 # Build definition
 build:
   # The steps that will be executed on build
