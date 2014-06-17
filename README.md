@@ -4,7 +4,7 @@
 
 ## About
 
-BoltStore is a session store backend for [gorilla/sessions](https://github.com/gorilla/sessions) using [Bolt](https://github.com/boltdb/bolt).
+BoltStore is a session store using [Bolt](https://github.com/boltdb/bolt). This store implements the [gorilla/sessions](https://github.com/gorilla/sessions) package's [Store](http://godoc.org/github.com/gorilla/sessions#Store) interface.
 
 ## Installation
 
