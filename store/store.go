@@ -120,7 +120,7 @@ func (s *Store) save(session *sessions.Session) error {
 	}
 	data, err := proto.Marshal(shared.NewSession(buf.Bytes(), session.Options.MaxAge))
 	if err != nil {
-		return nil
+		return err
 	}
 	err = s.db.Update(func(tx *bolt.Tx) error {
 		return tx.Bucket(s.config.DBOptions.BucketName).Put([]byte(session.ID), data)
