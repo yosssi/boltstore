@@ -1,1 +1,1 @@
-box: wercker/golang@1.1.2
+box: yosssi/golang-latest@1.0.1
