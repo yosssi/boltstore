@@ -32,33 +32,24 @@ import (
 var db *bolt.DB
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path[1:] == "favicon.ico" {
-		return
-	}
-
 	// Fetch a new store.
-	str, err := store.New(
-		db,
-		store.Config{
-			SessionOptions: sessions.Options{
-				MaxAge: 60 * 60 * 24 * 30, // 30days
-			},
-		},
-		[]byte("secret-key"),
-	)
+	str, err := store.New(db, store.Config{}, []byte("secret-key"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 	// Get a session.
 	session, err := str.Get(r, "session-key")
 	if err != nil {
-		panic(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	// Add a value.
+	// Add a value on the session.
 	session.Values["foo"] = "bar"
 
 	// Save the session.
 	if err := sessions.Save(r, w); err != nil {
-		panic(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
 	// Delete the session.
@@ -71,10 +62,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	var err error
 	// Open a Bolt database.
-	db, _ = bolt.Open("./sessions.db", 0666)
+	db, err = bolt.Open("./sessions.db", 0666)
+	if err != nil {
+		panic(err)
+	}
 	defer db.Close()
-	// Invoke a reaper which removes expired sessions.
+	// Invoke a reaper which checks and removes expired sessions periodically.
 	defer reaper.Quit(reaper.Run(db, reaper.Options{}))
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
