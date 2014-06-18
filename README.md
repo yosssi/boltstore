@@ -55,7 +55,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Delete the session.
 	session.Options.MaxAge = -1
 	if err := sessions.Save(r, w); err != nil {
-		panic(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
 	fmt.Fprintf(w, "Hello BoltStore")
