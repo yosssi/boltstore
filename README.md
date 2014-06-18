@@ -4,9 +4,9 @@
 [![Coverage Status](https://coveralls.io/repos/yosssi/boltstore/badge.png?branch=HEAD)](https://coveralls.io/r/yosssi/boltstore)
 [![GoDoc](https://godoc.org/github.com/yosssi/boltstore?status.png)](https://godoc.org/github.com/yosssi/boltstore)
 
-## About
+## Overview
 
-BoltStore is a session store using [Bolt](https://github.com/boltdb/bolt). This store implements the [gorilla/sessions](https://github.com/gorilla/sessions) package's [Store](http://godoc.org/github.com/gorilla/sessions#Store) interface.
+BoltStore is a session store using [Bolt](https://github.com/boltdb/bolt), which is a pure Go key/value store. You can store session data in Bolt by using this store. This store implements the [gorilla/sessions](https://github.com/gorilla/sessions) package's [Store](http://godoc.org/github.com/gorilla/sessions#Store) interface. BoltStore's APIs and examples can be seen on the BoltStore's [GoDoc](http://godoc.org/github.com/yosssi/boltstore) page.
 
 ## Installation
 
@@ -15,6 +15,8 @@ go get github.com/yosssi/boltstore/...
 ```
 
 ## Example
+
+Here is a simple example using BoltStore. You can see other examples on the BoltStore's [GoDoc](http://godoc.org/github.com/yosssi/boltstore) page.
 
 ```go
 package main
@@ -68,6 +70,16 @@ func main() {
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
 }
+```
+
+## Benchmarks
+
+```sh
+BenchmarkNew	                    5000	    316700 ns/op	   19003 B/op	      35 allocs/op
+BenchmarkStore_Get	            20000000	       104 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStore_New	            10000000	       294 ns/op	     130 B/op	       2 allocs/op
+BenchmarkStore_Save	            5000	    488683 ns/op	   65484 B/op	     136 allocs/op
+BenchmarkStore_Save_delete	    5000	    476563 ns/op	   59576 B/op	      76 allocs/op
 ```
 
 ## Documentation
