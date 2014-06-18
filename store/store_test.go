@@ -1,6 +1,7 @@
 package store
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -264,4 +265,10 @@ func TestNew(t *testing.T) {
 	if err.Error() != "database not open" {
 		t.Error(`str.delete  should return an error "%s" (actual: %s)`, "database not open", err)
 	}
+}
+
+func ExampleNew() {
+	fmt.Println("This is an example.")
+	// Output:
+	// This is an example.
 }
