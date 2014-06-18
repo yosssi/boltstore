@@ -32,7 +32,7 @@ import (
 var db *bolt.DB
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	// Fetch a new store.
+	// Create a store.
 	str, err := store.New(db, store.Config{}, []byte("secret-key"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -48,12 +48,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	session.Values["foo"] = "bar"
 
 	// Save the session.
-	if err := sessions.Save(r, w); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-
-	// Delete the session.
-	session.Options.MaxAge = -1
 	if err := sessions.Save(r, w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
