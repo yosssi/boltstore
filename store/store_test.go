@@ -1,7 +1,6 @@
 package store
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -267,8 +266,109 @@ func TestNew(t *testing.T) {
 	}
 }
 
+func ExampleStore_Get() {
+	// db(*bolt.DB) should be opened beforehand and passed by the other function.
+	var db *bolt.DB
+
+	// r(*http.Request) should be passed by the other function.
+	var r *http.Request
+
+	// Create a store.
+	str, err := New(db, Config{}, []byte("secret-key"))
+	if err != nil {
+		panic(err)
+	}
+
+	// Get a session.
+	session, err := str.Get(r, "session-key")
+	if err != nil {
+		panic(err)
+	}
+
+	// Add a value on the session.
+	session.Values["foo"] = "bar"
+}
+
+func ExampleStore_New() {
+	// db(*bolt.DB) should be opened beforehand and passed by the other function.
+	var db *bolt.DB
+
+	// r(*http.Request) should be passed by the other function.
+	var r *http.Request
+
+	// Create a store.
+	str, err := New(db, Config{}, []byte("secret-key"))
+	if err != nil {
+		panic(err)
+	}
+
+	// Create a session.
+	session, err := str.New(r, "session-key")
+	if err != nil {
+		panic(err)
+	}
+
+	// Add a value on the session.
+	session.Values["foo"] = "bar"
+}
+
+func ExampleStore_Save() {
+	// db(*bolt.DB) should be opened beforehand and passed by the other function.
+	var db *bolt.DB
+
+	// w(http.ResponseWriter) should be passed by the other function.
+	var w http.ResponseWriter
+
+	// r(*http.Request) should be passed by the other function.
+	var r *http.Request
+
+	// Create a store.
+	str, err := New(db, Config{}, []byte("secret-key"))
+	if err != nil {
+		panic(err)
+	}
+
+	// Create a session.
+	session, err := str.New(r, "session-key")
+	if err != nil {
+		panic(err)
+	}
+
+	// Add a value on the session.
+	session.Values["foo"] = "bar"
+
+	// Save the session.
+	if err := sessions.Save(r, w); err != nil {
+		panic(err)
+	}
+
+	// You can delete the session by setting the session options's MaxAge
+	// to a minus value
+	session.Options.MaxAge = -1
+	if err := sessions.Save(r, w); err != nil {
+		panic(err)
+	}
+}
+
 func ExampleNew() {
-	fmt.Println("This is an example.")
-	// Output:
-	// aaa
+	// db should be opened beforehand and passed by the other function.
+	var db *bolt.DB
+
+	// r(*http.Request) should be passed by the other function.
+	var r *http.Request
+
+	// Create a store.
+	str, err := New(db, Config{}, []byte("secret-key"))
+	if err != nil {
+		panic(err)
+	}
+
+	// Get a session.
+	session, err := str.Get(r, "session-key")
+	if err != nil {
+		panic(err)
+	}
+
+	// Add a value on the session.
+	session.Values["foo"] = "bar"
 }
