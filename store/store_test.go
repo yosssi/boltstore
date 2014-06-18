@@ -19,7 +19,7 @@ import (
 var benchmarkDB = fmt.Sprintf("benchmark_store_%d.db", time.Now().Unix())
 
 func init() {
-	if os.Getenv("CREATEBENCHDATA") != "true" {
+	if os.Getenv("CREATE_BENCHDATA") != "true" {
 		return
 	}
 
