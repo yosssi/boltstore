@@ -269,6 +269,4 @@ func TestNew(t *testing.T) {
 
 func ExampleNew() {
 	fmt.Println("This is an example.")
-	// Output:
-	// This is an example.
 }
