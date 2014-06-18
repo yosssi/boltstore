@@ -123,5 +123,19 @@ func Test_reap(t *testing.T) {
 	go reap(db, options, quitC, doneC)
 	time.Sleep(2 * time.Second)
 	Quit(quitC, doneC)
+}
 
+func ExampleRun() {
+	// Open a Bolt database.
+	db, err := bolt.Open("./sessions.db", 0666)
+	if err != nil {
+		panic(err)
+	}
+
+	// Close the database when the current function ends.
+	defer db.Close()
+
+	// Invoke a reaper which checks and removes expired sessions periodically.
+	// Terminate the reaper when the current function ends.
+	defer Quit(Run(db, Options{}))
 }

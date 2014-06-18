@@ -7,8 +7,10 @@ import (
 
 // Config represents a config for a session store.
 type Config struct {
+	// SessionOptions represents options for a session.
 	SessionOptions sessions.Options
-	DBOptions      Options
+	// DBOptions represents options for a database.
+	DBOptions Options
 }
 
 // setDefault sets default to the config.

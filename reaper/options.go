@@ -8,8 +8,12 @@ import (
 
 // Options represents options for the reaper.
 type Options struct {
-	BucketName    []byte
-	BatchSize     int
+	// BucketName represents the name of the bucket which contains sessions.
+	BucketName []byte
+	// BatchSize represents the maximum number of sessions which the reaper
+	// process at one time.
+	BatchSize int
+	// CheckInterval represents the interval between the reaper's invocation.
 	CheckInterval time.Duration
 }
 
