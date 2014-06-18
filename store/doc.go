@@ -1,5 +1,4 @@
 /*
-Package store provides a session store backend
-for gorilla/sessions using Bolt.
+Package store provides a session store using Bolt.
 */
 package store
