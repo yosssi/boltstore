@@ -75,10 +75,10 @@ func main() {
 ## Benchmarks
 
 ```sh
-BenchmarkNew	                    5000	    316700 ns/op	   19003 B/op	      35 allocs/op
-BenchmarkStore_Get	            20000000	       104 ns/op	       0 B/op	       0 allocs/op
-BenchmarkStore_New	            10000000	       294 ns/op	     130 B/op	       2 allocs/op
-BenchmarkStore_Save	            5000	    488683 ns/op	   65484 B/op	     136 allocs/op
+BenchmarkNew	    			5000	    316700 ns/op	   19003 B/op	      35 allocs/op
+BenchmarkStore_Get			20000000	       104 ns/op	       0 B/op	       0 allocs/op
+BenchmarkStore_New			10000000	       294 ns/op	     130 B/op	       2 allocs/op
+BenchmarkStore_Save	    		5000	    488683 ns/op	   65484 B/op	     136 allocs/op
 BenchmarkStore_Save_delete	    5000	    476563 ns/op	   59576 B/op	      76 allocs/op
 ```
 
