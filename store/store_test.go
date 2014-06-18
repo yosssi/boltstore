@@ -416,7 +416,7 @@ func ExampleStore_Save() {
 	}
 
 	// You can delete the session by setting the session options's MaxAge
-	// to a minus value
+	// to a minus value.
 	session.Options.MaxAge = -1
 	if err := sessions.Save(r, w); err != nil {
 		panic(err)
