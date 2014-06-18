@@ -6,7 +6,7 @@
 
 ## Overview
 
-BoltStore is a session store using [Bolt](https://github.com/boltdb/bolt), which is a pure Go key/value store. You can store session data in Bolt by using this store. This store implements the [gorilla/sessions](https://github.com/gorilla/sessions) package's [Store](http://godoc.org/github.com/gorilla/sessions#Store) interface. BoltStore's APIs and examples can be seen on the BoltStore's [GoDoc](http://godoc.org/github.com/yosssi/boltstore) page.
+BoltStore is a session store using [Bolt](https://github.com/boltdb/bolt) which is a pure Go key/value store. You can store session data in Bolt by using this store. This store implements the [gorilla/sessions](https://github.com/gorilla/sessions) package's [Store](http://godoc.org/github.com/gorilla/sessions#Store) interface. BoltStore's APIs and examples can be seen on the BoltStore's [GoDoc](http://godoc.org/github.com/yosssi/boltstore) page.
 
 ## Installation
 
