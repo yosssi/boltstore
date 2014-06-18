@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strconv"
 	"testing"
 	"time"
@@ -18,6 +19,10 @@ import (
 var benchmarkDB = fmt.Sprintf("benchmark_store_%d.db", time.Now().Unix())
 
 func init() {
+	if os.Getenv("NOBENCHDATA") == "true" {
+		return
+	}
+
 	// Put data to the database for the benchmark.
 	db, err := bolt.Open(benchmarkDB, 0666)
 	if err != nil {
