@@ -60,7 +60,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var err error
 	// Open a Bolt database.
-	db, err = bolt.Open("./sessions.db", 0666)
+	db, err = bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		panic(err)
 	}

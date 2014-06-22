@@ -11,7 +11,7 @@ import (
 )
 
 func TestRun(t *testing.T) {
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -20,7 +20,7 @@ func TestRun(t *testing.T) {
 }
 
 func TestQuit(t *testing.T) {
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -32,7 +32,7 @@ func TestQuit(t *testing.T) {
 
 func Test_reap(t *testing.T) {
 	// When the target bucket does not exist
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -127,7 +127,7 @@ func Test_reap(t *testing.T) {
 
 func ExampleRun() {
 	// Open a Bolt database.
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		panic(err)
 	}

@@ -24,7 +24,7 @@ func init() {
 	}
 
 	// Put data to the database for the benchmark.
-	db, err := bolt.Open(benchmarkDB, 0666)
+	db, err := bolt.Open(benchmarkDB, 0666, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -72,7 +72,7 @@ func init() {
 }
 
 func TestStore_Get(t *testing.T) {
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -103,7 +103,7 @@ func TestStore_Get(t *testing.T) {
 }
 
 func TestStore_New(t *testing.T) {
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -141,7 +141,7 @@ func TestStore_New(t *testing.T) {
 
 func TestStore_Save(t *testing.T) {
 	// When session.Options.MaxAge < 0
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -206,7 +206,7 @@ func TestStore_Save(t *testing.T) {
 }
 
 func TestStore_load(t *testing.T) {
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -287,7 +287,7 @@ func TestStore_load(t *testing.T) {
 }
 
 func TestSession_delete(t *testing.T) {
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -323,7 +323,7 @@ func TestSession_delete(t *testing.T) {
 
 func TestNew(t *testing.T) {
 	// When db.Update returns an error
-	db, err := bolt.Open("./sessions.db", 0666)
+	db, err := bolt.Open("./sessions.db", 0666, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -447,7 +447,7 @@ func ExampleNew() {
 }
 
 func BenchmarkNew(b *testing.B) {
-	db, err := bolt.Open(benchmarkDB, 0666)
+	db, err := bolt.Open(benchmarkDB, 0666, nil)
 	if err != nil {
 		b.Error(err)
 	}
@@ -467,7 +467,7 @@ func BenchmarkNew(b *testing.B) {
 }
 
 func BenchmarkStore_Get(b *testing.B) {
-	db, err := bolt.Open(benchmarkDB, 0666)
+	db, err := bolt.Open(benchmarkDB, 0666, nil)
 	if err != nil {
 		b.Error(err)
 	}
@@ -497,7 +497,7 @@ func BenchmarkStore_Get(b *testing.B) {
 }
 
 func BenchmarkStore_New(b *testing.B) {
-	db, err := bolt.Open(benchmarkDB, 0666)
+	db, err := bolt.Open(benchmarkDB, 0666, nil)
 	if err != nil {
 		b.Error(err)
 	}
@@ -527,7 +527,7 @@ func BenchmarkStore_New(b *testing.B) {
 }
 
 func BenchmarkStore_Save(b *testing.B) {
-	db, err := bolt.Open(benchmarkDB, 0666)
+	db, err := bolt.Open(benchmarkDB, 0666, nil)
 	if err != nil {
 		b.Error(err)
 	}
@@ -565,7 +565,7 @@ func BenchmarkStore_Save(b *testing.B) {
 }
 
 func BenchmarkStore_Save_delete(b *testing.B) {
-	db, err := bolt.Open(benchmarkDB, 0666)
+	db, err := bolt.Open(benchmarkDB, 0666, nil)
 	if err != nil {
 		b.Error(err)
 	}
