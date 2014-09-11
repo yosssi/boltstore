@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"testing"
 	"time"
+
 	"code.google.com/p/gogoprotobuf/proto"
 
 	"github.com/boltdb/bolt"
@@ -193,7 +194,7 @@ func TestStore_Save(t *testing.T) {
 	session.Values = make(map[interface{}]interface{})
 	session.Values[make(chan int)] = make(chan int)
 	if err := str.Save(req, w, session); err == nil || err.Error() != "gob: type not registered for interface: chan int" {
-		t.Error(`str.Save should return an error "%s" (actual: %+v)`, "gob: type not registered for interface: chan int", err)
+		t.Errorf(`str.Save should return an error "%s" (actual: %+v)`, "gob: type not registered for interface: chan int", err)
 	}
 
 	// When session.Options.MaxAge >= 0 and
@@ -201,7 +202,7 @@ func TestStore_Save(t *testing.T) {
 	session.Values = make(map[interface{}]interface{})
 	str.codecs = nil
 	if err := str.Save(req, w, session); err == nil || err.Error() != "securecookie: no codecs provided" {
-		t.Error(`str.Save should return an error "%s" (actual: %+v)`, "securecookie: no codecs provided", err)
+		t.Errorf(`str.Save should return an error "%s" (actual: %+v)`, "securecookie: no codecs provided", err)
 	}
 }
 
@@ -265,8 +266,8 @@ func TestStore_load(t *testing.T) {
 		t.Error(err)
 	}
 	_, err = str.load(session)
-	if err == nil || err.Error() != "proto: field/encoding mismatch: wrong type for field" {
-		t.Error(`str.load should return an error "%s" (actual: %s)`, "proto: field/encoding mismatch: wrong type for field", err)
+	if err == nil || err.Error() != "proto: protobuf.Session: wiretype end group for non-group" {
+		t.Errorf(`str.load should return an error "%s" (actual: %s)`, "proto: protobuf.Session: wiretype end group for non-group", err)
 	}
 
 	// When the target session data is expired
