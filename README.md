@@ -2,7 +2,7 @@
 
 [![wercker status](https://app.wercker.com/status/752959ce0f923476671e49fb9b76ebe0/m "wercker status")](https://app.wercker.com/project/bykey/752959ce0f923476671e49fb9b76ebe0)
 [![Coverage Status](https://coveralls.io/repos/yosssi/boltstore/badge.png?branch=HEAD)](https://coveralls.io/r/yosssi/boltstore)
-[![GoDoc](https://godoc.org/github.com/yosssi/boltstore?status.png)](https://godoc.org/github.com/yosssi/boltstore)
+[![GoDoc](http://godoc.org/github.com/yosssi/boltstore?status.png)](http://godoc.org/github.com/yosssi/boltstore)
 
 ## Overview
 
