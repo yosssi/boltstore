@@ -15,6 +15,6 @@ const (
 
 // Defaults for reaper.Options
 const (
-	DefaultBatchSize     = 10
-	DefaultCheckInterval = time.Second
+	DefaultBatchSize     = 100
+	DefaultCheckInterval = time.Minute
 )
