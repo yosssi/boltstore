@@ -60,6 +60,10 @@ func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- stru
 				}
 
 				if options.BatchSize == i {
+					// Store the current key to the previous key.
+					// Copy the byte slice key, because this data is
+					// not safe outside of this transaction.
+					prevKey = make([]byte, len(k))
 					copy(prevKey, k)
 					return nil
 				}
