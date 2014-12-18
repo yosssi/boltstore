@@ -1,12 +1,17 @@
 package reaper
 
 import (
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/boltdb/bolt"
 	"github.com/yosssi/boltstore/shared"
 )
+
+//##############//
+//### Public ###//
+//##############//
 
 // Run invokes a reap function as a goroutine.
 func Run(db *bolt.DB, options Options) (chan<- struct{}, <-chan struct{}) {
@@ -22,9 +27,17 @@ func Quit(quitC chan<- struct{}, doneC <-chan struct{}) {
 	<-doneC
 }
 
+//###############//
+//### Private ###//
+//###############//
+
 func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- struct{}) {
 	var prevKey []byte
 	for {
+		// This slice is a buffer to save all expired session keys.
+		expiredSessionKeys := make([][]byte, 0)
+
+		// Start a bolt read transaction.
 		err := db.View(func(tx *bolt.Tx) error {
 			bucket := tx.Bucket(options.BucketName)
 			if bucket == nil {
@@ -34,6 +47,7 @@ func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- stru
 			c := bucket.Cursor()
 
 			var i int
+			var isExpired bool
 
 			for k, v := c.Seek(prevKey); ; k, v = c.Next() {
 				// If we hit the end of our sessions then
@@ -45,18 +59,27 @@ func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- stru
 
 				i++
 
+				// The flag if the session is expired
+				isExpired = false
+
 				session, err := shared.Session(v)
 				if err != nil {
-					return err
+					// Just remove the session with the invalid session data.
+					// Log the error first.
+					log.Printf("boltstore: removing session from database with invalid value: %v", err)
+					isExpired = true
+				} else if shared.Expired(session) {
+					isExpired = true
 				}
 
-				if shared.Expired(session) {
-					err := db.Update(func(txu *bolt.Tx) error {
-						return txu.Bucket(options.BucketName).Delete(k)
-					})
-					if err != nil {
-						return err
-					}
+				if isExpired {
+					// Copy the byte slice key, because this data is
+					// not safe outside of this transaction.
+					temp := make([]byte, len(k))
+					copy(temp, k)
+
+					// Add it to the expired sessios keys slice
+					expiredSessionKeys = append(expiredSessionKeys, temp)
 				}
 
 				if options.BatchSize == i {
@@ -71,7 +94,32 @@ func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- stru
 		})
 
 		if err != nil {
-			log.Println(err.Error())
+			log.Printf("boltstore: obtain expired sessions error: %v", err)
+		}
+
+		if len(expiredSessionKeys) > 0 {
+			// Remove the expired sessions from the database
+			err = db.Update(func(txu *bolt.Tx) error {
+				// Get the bucket
+				b := txu.Bucket(options.BucketName)
+				if b == nil {
+					return nil
+				}
+
+				// Remove all expired sessions in the slice
+				for _, key := range expiredSessionKeys {
+					err = b.Delete(key)
+					if err != nil {
+						return err
+					}
+				}
+
+				return nil
+			})
+
+			if err != nil {
+				log.Printf("boltstore: remove expired sessions error: %v", err)
+			}
 		}
 
 		// Check if a quit signal is sent.
