@@ -1,10 +1,10 @@
 package reaper
 
 import (
+	"code.google.com/p/gogoprotobuf/proto"
 	"fmt"
 	"testing"
 	"time"
-	"code.google.com/p/gogoprotobuf/proto"
 
 	"github.com/boltdb/bolt"
 	"github.com/yosssi/boltstore/shared"
@@ -62,7 +62,12 @@ func Test_reap(t *testing.T) {
 
 	// When shared.Session returns an error
 	err = db.Update(func(tx *bolt.Tx) error {
-		return tx.Bucket(bucketName).Put([]byte("test"), []byte("value"))
+		session := shared.NewSession([]byte{}, -1)
+		data, err := proto.Marshal(session)
+		if err != nil {
+			return err
+		}
+		return tx.Bucket(bucketName).Put([]byte("test"), data)
 	})
 	if err != nil {
 		t.Error(err.Error())
