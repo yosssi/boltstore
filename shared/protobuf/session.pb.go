@@ -13,18 +13,18 @@ It has these top-level messages:
 */
 package protobuf
 
-import proto "code.google.com/p/gogoprotobuf/proto"
-import json "encoding/json"
+import proto "github.com/gogo/protobuf/proto"
+import fmt "fmt"
 import math "math"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
+var _ = fmt.Errorf
 var _ = math.Inf
 
 type Session struct {
-	Values           []byte `protobuf:"bytes,1,opt" json:"Values,omitempty"`
-	ExpiresAt        *int64 `protobuf:"varint,2,opt" json:"ExpiresAt,omitempty"`
+	Values           []byte `protobuf:"bytes,1,opt,name=Values" json:"Values,omitempty"`
+	ExpiresAt        *int64 `protobuf:"varint,2,opt,name=ExpiresAt" json:"ExpiresAt,omitempty"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
@@ -44,7 +44,4 @@ func (m *Session) GetExpiresAt() int64 {
 		return *m.ExpiresAt
 	}
 	return 0
-}
-
-func init() {
 }

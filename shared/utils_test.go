@@ -1,11 +1,11 @@
 package shared
 
 import (
+	"github.com/yosssi/boltstore/shared/protobuf"
 	"testing"
 	"time"
-	"github.com/yosssi/boltstore/shared/protobuf"
 
-	"code.google.com/p/gogoprotobuf/proto"
+	"github.com/gogo/protobuf/proto"
 )
 
 func TestSession(t *testing.T) {
