@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/base32"
 	"encoding/gob"
+	"github.com/gogo/protobuf/proto"
 	"net/http"
 	"strings"
-	"code.google.com/p/gogoprotobuf/proto"
 
 	"github.com/boltdb/bolt"
 	"github.com/gorilla/securecookie"

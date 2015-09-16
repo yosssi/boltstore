@@ -3,7 +3,7 @@ package shared
 import (
 	"time"
 
-	"code.google.com/p/gogoprotobuf/proto"
+	"github.com/gogo/protobuf/proto"
 	"github.com/yosssi/boltstore/shared/protobuf"
 )
 
