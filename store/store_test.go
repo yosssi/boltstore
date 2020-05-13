@@ -318,7 +318,7 @@ func TestSession_delete(t *testing.T) {
 	err = str.delete(session)
 
 	if err.Error() != "database not open" {
-		t.Error(`str.delete should return an error "%s" (actual: %s)`, "database not open", err)
+		t.Errorf(`str.delete should return an error "%s" (actual: %s)`, "database not open", err)
 	}
 }
 
@@ -336,7 +336,7 @@ func TestNew(t *testing.T) {
 		[]byte("secret-key"),
 	)
 	if err.Error() != "database not open" {
-		t.Error(`str.delete  should return an error "%s" (actual: %s)`, "database not open", err)
+		t.Errorf(`str.delete  should return an error "%s" (actual: %s)`, "database not open", err)
 	}
 }
 

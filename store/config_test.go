@@ -13,7 +13,7 @@ func TestConfig_setDefault(t *testing.T) {
 		t.Errorf("config.SessionOptions.Path should be %s (actual: %s)", shared.DefaultPath, config.SessionOptions.Path)
 	}
 	if config.SessionOptions.MaxAge != shared.DefaultMaxAge {
-		t.Errorf("config.SessionOptions.MaxAge should be %s (actual: %s)", shared.DefaultMaxAge, config.SessionOptions.MaxAge)
+		t.Errorf("config.SessionOptions.MaxAge should be %d (actual: %d)", shared.DefaultMaxAge, config.SessionOptions.MaxAge)
 	}
 	if string(config.DBOptions.BucketName) != shared.DefaultBucketName {
 		t.Errorf("config.SessionOptions.BucketName should be %+v (actual: %+v)", shared.DefaultBucketName, config.DBOptions.BucketName)
