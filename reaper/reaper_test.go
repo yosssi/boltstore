@@ -77,6 +77,12 @@ func Test_reap(t *testing.T) {
 	Quit(quitC, doneC)
 
 	// When the target session is expired
+	predeleteFlag := false
+	options.PreDeleteFn = func(values map[interface{}]interface{}) error {
+		predeleteFlag = true
+		return nil
+	}
+	options.CheckInterval = 2 * time.Second
 	err = db.Update(func(tx *bolt.Tx) error {
 		err := tx.Bucket(bucketName).Delete([]byte("test"))
 		if err != nil {
@@ -93,8 +99,11 @@ func Test_reap(t *testing.T) {
 		t.Error(err.Error())
 	}
 	go reap(db, options, quitC, doneC)
-	time.Sleep(2 * time.Second)
+	time.Sleep(5 * time.Second)
 	Quit(quitC, doneC)
+	if !predeleteFlag {
+		t.Fatal("pre-delete function did not run")
+	}
 
 	// When options.BatchSize == i
 	err = db.Update(func(tx *bolt.Tx) error {

@@ -15,6 +15,9 @@ type Options struct {
 	BatchSize int
 	// CheckInterval represents the interval between the reaper's invocation.
 	CheckInterval time.Duration
+	// PreDeleteFn register a function to be called before deleting a session.
+	// If a non-nil error is returned, the session won't be deleted
+	PreDeleteFn func(values map[interface{}]interface{}) error
 }
 
 // setDefault sets default to the reaper options.

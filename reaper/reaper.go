@@ -1,6 +1,9 @@
 package reaper
 
 import (
+	"bytes"
+	"encoding/gob"
+	"github.com/yosssi/boltstore/shared/protobuf"
 	"log"
 	"time"
 
@@ -48,7 +51,11 @@ func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- stru
 			return
 		case <-ticker.C: // Check if the ticker fires a signal.
 			// This slice is a buffer to save all expired session keys.
-			expiredSessionKeys := make([][]byte, 0)
+			type kv struct {
+				key []byte
+				value *protobuf.Session
+			}
+			expiredSessionKeys := make([]kv, 0)
 
 			// Start a bolt read transaction.
 			err := db.View(func(tx *bolt.Tx) error {
@@ -92,7 +99,8 @@ func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- stru
 						copy(temp, k)
 
 						// Add it to the expired sessios keys slice
-						expiredSessionKeys = append(expiredSessionKeys, temp)
+						kv := kv{key: temp, value: &session}
+						expiredSessionKeys = append(expiredSessionKeys, kv)
 					}
 
 					if options.BatchSize == i {
@@ -120,8 +128,23 @@ func reap(db *bolt.DB, options Options, quitC <-chan struct{}, doneC chan<- stru
 					}
 
 					// Remove all expired sessions in the slice
-					for _, key := range expiredSessionKeys {
-						err = b.Delete(key)
+					for _, kv := range expiredSessionKeys {
+						if options.PreDeleteFn != nil {
+							var values map[interface{}]interface{}
+							if len(kv.value.Values) != 0 {
+								values = make(map[interface{}]interface{})
+								dec := gob.NewDecoder(bytes.NewBuffer(kv.value.Values))
+								err := dec.Decode(&values)
+								if err != nil {
+									return err
+								}
+							}
+							err = options.PreDeleteFn(values)
+							if err != nil {
+								continue
+							}
+						}
+						err = b.Delete(kv.key)
 						if err != nil {
 							return err
 						}
