@@ -266,8 +266,8 @@ func TestStore_load(t *testing.T) {
 		t.Error(err)
 	}
 	_, err = str.load(session)
-	if err == nil || err.Error() != "proto: protobuf.Session: wiretype end group for non-group" {
-		t.Errorf(`str.load should return an error "%s" (actual: %s)`, "proto: protobuf.Session: wiretype end group for non-group", err)
+	if err == nil || err.Error() != "proto: can't skip unknown wire type 4" {
+		t.Errorf(`str.load should return an error "%s" (actual: %s)`, "proto: can't skip unknown wire type 4", err)
 	}
 
 	// When the target session data is expired
@@ -318,7 +318,7 @@ func TestSession_delete(t *testing.T) {
 	err = str.delete(session)
 
 	if err.Error() != "database not open" {
-		t.Error(`str.delete should return an error "%s" (actual: %s)`, "database not open", err)
+		t.Errorf(`str.delete should return an error "%s" (actual: %s)`, "database not open", err)
 	}
 }
 
@@ -336,7 +336,7 @@ func TestNew(t *testing.T) {
 		[]byte("secret-key"),
 	)
 	if err.Error() != "database not open" {
-		t.Error(`str.delete  should return an error "%s" (actual: %s)`, "database not open", err)
+		t.Errorf(`str.delete  should return an error "%s" (actual: %s)`, "database not open", err)
 	}
 }
 
