@@ -104,6 +104,13 @@ func Test_reap(t *testing.T) {
 	if !predeleteFlag {
 		t.Fatal("pre-delete function did not run")
 	}
+	db.View(func(tx *bolt.Tx) error {
+		val := tx.Bucket(bucketName).Get([]byte("test"))
+		if val != nil {
+			t.Fatal("Key 'test' was not deleted by reaper")
+		}
+		return nil
+	})
 
 	// When options.BatchSize == i
 	err = db.Update(func(tx *bolt.Tx) error {
