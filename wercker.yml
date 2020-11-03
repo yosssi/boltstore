@@ -1,4 +1,7 @@
-box: yosssi/golang-latest@1.0.7
+box:
+  id: golang
+  ports:
+    - "5000"
 # Build definition
 build:
   # The steps that will be executed on build
